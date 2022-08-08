@@ -1,0 +1,39 @@
+server:
+  port: 9005 #端口
+spring:
+  application:
+    name: service-product #服务名称
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/mybatis?useUnicode=true&characterEncoding=utf8
+    username: root
+    password: 123456
+  jpa:
+    database: MySQL
+    show-sql: true
+    open-in-view: true
+  ###开始配置consul的服务注册
+  cloud:
+    consul:
+      host: 127.0.0.1 #consul服务器的主机地址
+      port: 8500 #consul服务器的端口有
+      discovery:
+        #是否需要注册
+        register: true
+        #注册的实例ID (唯一标志)
+        instance-id: ${spring.application.name}-3
+        #服务的名称
+        service-name: ${spring.application.name}
+        #服务的请求端口
+        port: ${server.port}
+        #指定开启ip地址注册
+        prefer-ip-address: true
+        #当前服务的请求ip
+        ip-address: ${spring.cloud.client.ip-address}
+  cache:
+    type: ehcache
+    ehcache:
+      config: classpath:ehcache.xml
+
+#logging:
+#  level: info
